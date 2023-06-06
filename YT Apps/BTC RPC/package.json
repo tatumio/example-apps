@@ -1,0 +1,19 @@
+{
+  "name": "nft-gated-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "source": "index.html",
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "serve": "parcel index.html '*.html'",
+    "start": "run-p watch serve"
+  },
+  "dependencies": {
+    "@tatumcom/js": "^1.4.20",
+    "parcel": "^2.9.0"
+  },
+  "devDependencies": {
+    "process": "^0.11.10"
+  }
+}
