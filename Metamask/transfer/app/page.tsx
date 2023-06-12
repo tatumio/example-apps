@@ -33,7 +33,7 @@ export default function Home() {
 
       <a
         href="https://docs.tatum.com/"
-        className="group text-center border border-black rounded-lg border border-transparent px-5 py-4 transition-colors hover:bg-black hover:text-white lg:w-[600px]"
+        className="group text-center bg-white border border-black rounded-lg border px-5 py-4 transition-colors hover:bg-black hover:text-white lg:w-[600px]"
         target="_blank"
         rel="noopener noreferrer"
       >
