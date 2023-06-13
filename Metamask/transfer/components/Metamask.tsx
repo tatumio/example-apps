@@ -6,6 +6,7 @@ import { TatumSDK, Network, Ethereum } from "@tatumcom/js";
 import { toast } from "react-hot-toast";
 
 import Button from "./Button";
+import Card from "./Card";
 import Loading from "./Loading";
 
 const Metamask = (): JSX.Element => {
@@ -13,7 +14,7 @@ const Metamask = (): JSX.Element => {
   // https://docs.tatum.com/docs/wallet-provider/metamask
   // https://github.com/tatumio/tatum-js/blob/master/README.md
 
-  const [account, setAccount] = React.useState("Connect");
+  const [account, setAccount] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   const connectMetamask = async () => {
@@ -32,17 +33,30 @@ const Metamask = (): JSX.Element => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-10">
-      <Image
-        src="/metamask.svg"
-        alt="Metamask Logo"
-        width={200}
-        height={50}
-        priority
-      />
-      <Button onClick={connectMetamask} disabled={loading}>
-        {loading ? <Loading /> : account}
-      </Button>
+    <div>
+      <Card
+        className={`absolute inset-0 transition-opacity duration-500 ${
+          account ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
+      >
+        <Image
+          src="/metamask.svg"
+          alt="Metamask Logo"
+          width={200}
+          height={50}
+          priority
+        />
+        <Button onClick={connectMetamask} disabled={loading}>
+          {loading ? <Loading /> : "Connect"}
+        </Button>
+      </Card>
+      <Card
+        className={`absolute inset-0 transition-opacity duration-500 ${
+          account ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        CONNECTED
+      </Card>
     </div>
   );
 };
