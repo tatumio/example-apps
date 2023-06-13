@@ -6,6 +6,7 @@ import { TatumSDK, Network, Ethereum } from "@tatumcom/js";
 import { toast } from "react-hot-toast";
 
 import Button from "./Button";
+import Loading from "./Loading";
 
 const Metamask = (): JSX.Element => {
   // TODO: Add proper implementation based on:
@@ -13,8 +14,10 @@ const Metamask = (): JSX.Element => {
   // https://github.com/tatumio/tatum-js/blob/master/README.md
 
   const [account, setAccount] = React.useState("Connect");
+  const [loading, setLoading] = React.useState(false);
 
   const connectMetamask = async () => {
+    setLoading(true);
     try {
       const tatum = await TatumSDK.init<Ethereum>({
         network: Network.ETHEREUM,
@@ -25,6 +28,7 @@ const Metamask = (): JSX.Element => {
       console.error(error);
       toast.error("Connection failed");
     }
+    setLoading(false);
   };
 
   return (
@@ -36,7 +40,9 @@ const Metamask = (): JSX.Element => {
         height={50}
         priority
       />
-      <Button onClick={connectMetamask}>{account}</Button>
+      <Button onClick={connectMetamask} disabled={loading}>
+        {loading ? <Loading /> : account}
+      </Button>
     </div>
   );
 };
