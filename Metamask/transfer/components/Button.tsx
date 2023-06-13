@@ -19,7 +19,7 @@ const Button = React.forwardRef<
       <button
         ref={ref}
         className={clsxm(
-          "flex items-center justify-center font-mono text-center min-w-[150px] border border-black rounded-md border p-3 transition-colors hover:bg-white hover:text-black",
+          "flex text-md items-center justify-center font-mono text-center min-w-[150px] min-h-[50px] border border-black rounded-md border p-3 transition-colors hover:bg-white hover:text-black",
           disabled ? "bg-white text-black" : "bg-black text-white",
           className
         )}
