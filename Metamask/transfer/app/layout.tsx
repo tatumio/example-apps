@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Metamask Transfer Example",
-  description: "Connect wallet and perform simple transfer",
+  description: "Connect your wallet and perform a quick transfer of funds",
 };
 
 export default function RootLayout({
