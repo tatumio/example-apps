@@ -1,3 +1,4 @@
+/* Required since nextjs13 to define a client component */
 "use client";
 
 import { TatumSDK, Network, Ethereum } from "@tatumcom/js";
@@ -12,9 +13,6 @@ import Card from "./Card";
 import Loading from "./Loading";
 
 const Metamask = (): JSX.Element => {
-  // https://docs.tatum.com/docs/wallet-provider/metamask
-  // https://docs.tatum.com/docs/wallet-address-operations/get-all-assets-the-wallet-holds
-
   const [loading, setLoading] = React.useState(false);
   const [account, setAccount] = React.useState("");
   const [balance, setBalance] = React.useState("");
@@ -28,7 +26,11 @@ const Metamask = (): JSX.Element => {
       const tatum = await TatumSDK.init<Ethereum>({
         network: Network.ETHEREUM_SEPOLIA,
       });
+
+      /* https://docs.tatum.com/docs/wallet-provider/metamask/connect-a-wallet */
       const acc = await tatum.walletProvider.metaMask.connect();
+
+      /* https://docs.tatum.com/docs/wallet-address-operations/get-all-assets-the-wallet-holds */
       const bal = await tatum.address.getBalance({ addresses: [acc] });
 
       setAccount(acc);
@@ -49,14 +51,19 @@ const Metamask = (): JSX.Element => {
       const tatum = await TatumSDK.init<Ethereum>({
         network: Network.ETHEREUM_SEPOLIA,
       });
+
+      /* https://docs.tatum.com/docs/wallet-provider/metamask/transfer-native-assets */
       const tx = await tatum.walletProvider.metaMask.transferNative(
         address,
         amount
       );
+
       console.log(tx);
       toast.success("Transfer successful");
 
+      /* https://docs.tatum.com/docs/wallet-address-operations/get-all-assets-the-wallet-holds */
       const bal = await tatum.address.getBalance({ addresses: [account] });
+
       setBalance(getNativeBalance(bal.data));
     } catch (error) {
       console.error(error);

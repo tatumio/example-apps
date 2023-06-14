@@ -3,15 +3,18 @@ import { Toaster } from "react-hot-toast";
 
 import Metamask from "@/components/Metamask";
 
+import { metadata } from "./layout";
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      {/* Third-party component for quick and easy notifications - https://react-hot-toast.com */}
       <Toaster />
 
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed tatum left-0 top-0 flex w-full justify-center border-b pb-6 pt-8 lg:static lg:w-auto lg:rounded-xl lg:p-4">
           Get started with&nbsp;
-          <code className="font-bold">Metamask Transfer Example</code>
+          <code className="font-bold">{metadata.title}</code>
         </p>
         <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center lg:static lg:h-auto lg:w-auto lg:bg-none">
           <a
@@ -32,6 +35,7 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Main portion of the example */}
       <Metamask />
 
       <a
