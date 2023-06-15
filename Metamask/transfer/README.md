@@ -4,7 +4,7 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) utilizing [`@tatumcom/js`](https://docs.tatum.com/sdk/javascript-typescript-sdk) for a simple [Metamask](https://metamask.io/) integration. It combines several examples available in [Tatum Docs](https://docs.tatum.com/) into a single straightforward easily customizable mini application capable of connecting to the wallet and executing a native currency transfer on [Sepolia Testnet](https://sepolia.etherscan.io/) blockchain.
 
-![Dapp](https://i.imgur.com/4PBqKf0.gif)
+![Demo](https://i.imgur.com/4PBqKf0.gif)
 
 ## Prerequisites
 
