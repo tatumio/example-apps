@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1532px" height="1059px" viewBox="0 0 1532 1059" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group 28</title>
+    <defs>
+        <filter x="-120.9%" y="-37.5%" width="341.7%" height="175.0%" filterUnits="objectBoundingBox" id="filter-1">
+            <feGaussianBlur stdDeviation="50" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#5CFF86" offset="0%"></stop>
+            <stop stop-color="#59CEFF" offset="33.8322558%"></stop>
+            <stop stop-color="#55C1FF" offset="100%"></stop>
+        </linearGradient>
+        <filter x="-90.5%" y="-28.1%" width="281.1%" height="156.2%" filterUnits="objectBoundingBox" id="filter-3">
+            <feGaussianBlur stdDeviation="50" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-Copy-4" transform="translate(163.000000, 113.000000)">
+            <g id="Group-11" transform="translate(40.780619, 44.000000)">
+                <g id="Group-28" transform="translate(0.000000, 46.707034)">
+                    <rect id="Rectangle" x="0.2193806" y="0.29296582" width="1328" height="774"></rect>
+                    <ellipse id="Oval" fill="#373AFD" opacity="0.15" filter="url(#filter-1)" transform="translate(205.719381, 503.292966) rotate(62.000000) translate(-205.719381, -503.292966) " cx="205.719381" cy="503.292966" rx="62.0481928" ry="200"></ellipse>
+                    <ellipse id="Oval-Copy-3" fill="url(#linearGradient-2)" opacity="0.15" filter="url(#filter-3)" transform="translate(557.461013, 198.487286) rotate(62.000000) translate(-557.461013, -198.487286) " cx="557.461013" cy="198.487286" rx="82.8343373" ry="267"></ellipse>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
