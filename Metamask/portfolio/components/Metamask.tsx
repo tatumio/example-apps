@@ -14,7 +14,10 @@ import { processBalances } from "@/lib/utils";
 const Metamask = (): JSX.Element => {
   const [loading, setLoading] = React.useState(false);
   const [account, setAccount] = React.useState("");
-  const [balances, setBalances] = React.useState([{}]);
+  const [balances, setBalances] = React.useState({});
+  const [update, setUpdate] = React.useState(false);
+  const [token, setToken] = React.useState({ addr: "", id: "" });
+  const [metadata, setMetadata] = React.useState({});
 
   const connectMetamask = async () => {
     setLoading(true);
@@ -27,18 +30,7 @@ const Metamask = (): JSX.Element => {
       /* https://docs.tatum.com/docs/wallet-provider/metamask/connect-a-wallet */
       const acc = await tatum.walletProvider.metaMask.connect();
 
-      /* https://docs.tatum.com/docs/wallet-address-operations/get-all-assets-the-wallet-holds */
-      const bal = await tatum.address.getBalance({
-        addresses: [
-          "0x4edd6b97add54cab38f767618d19d04992a3d55a" /* TODO: replace with acc */,
-        ],
-      });
-
-      // TODO: Discuss whether there is a faster way
-      console.log(await processBalances(bal.data, tatum.nft));
-
       setAccount(acc);
-      setBalances(bal.data);
     } catch (error) {
       console.error(error);
       toast.error("Connection failed");
@@ -46,6 +38,65 @@ const Metamask = (): JSX.Element => {
 
     setLoading(false);
   };
+
+  const fetchBalances = async () => {
+    setLoading(true);
+
+    try {
+      const tatum = await TatumSDK.init<Ethereum>({
+        network: Network.ETHEREUM_SEPOLIA,
+      });
+
+      /* https://docs.tatum.com/docs/wallet-address-operations/get-all-assets-the-wallet-holds */
+      const bal = await tatum.address.getBalance({
+        addresses: [
+          "0x4edd6b97add54cab38f767618d19d04992a3d55a" /* TODO: replace with acc */,
+        ],
+      });
+
+      setBalances(processBalances(bal.data));
+    } catch (error) {
+      console.error(error);
+      toast.error("Balances failed to load");
+    }
+
+    setLoading(false);
+  };
+
+  const getNftMetadata = async (addr: string, id: string) => {
+    setLoading(true);
+
+    try {
+      const tatum = await TatumSDK.init<Ethereum>({
+        network: Network.ETHEREUM_SEPOLIA,
+      });
+
+      /* https://docs.tatum.com/docs/nfts/get-the-metadata-of-a-specific-nft */
+      const nft = await tatum.nft.getNftMetadata({
+        tokenAddress: addr,
+        tokenId: id,
+      });
+
+      if (nft.data && nft.data.metadata) setMetadata(nft.data.metadata);
+    } catch (error) {
+      console.error(error);
+      toast.error("Metadata failed to load");
+    }
+
+    setLoading(false);
+  };
+
+  React.useEffect(() => {
+    if (!account) return;
+
+    fetchBalances();
+  }, [account, update]);
+
+  React.useEffect(() => {
+    if (!token.addr || !token.id) return;
+
+    getNftMetadata(token.addr, token.id);
+  }, [token]);
 
   return (
     <div>

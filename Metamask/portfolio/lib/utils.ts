@@ -1,4 +1,4 @@
-import { AddressBalance, Nft } from "@tatumcom/js";
+import { AddressBalance } from "@tatumcom/js";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -9,10 +9,9 @@ interface Token {
 
 interface NftToken extends Token {
   id: string;
-  metadata?: Record<string, unknown>;
 }
 
-export interface Balances {
+interface Balances {
   coin: string;
   erc20: Token[];
   erc721: NftToken[];
@@ -26,23 +25,11 @@ const getTokenAddress = (address?: string) => address || "?";
 
 const getTokenId = (id?: string) => id || "";
 
-/* https://docs.tatum.com/docs/nfts */
-const getMetadata = async (nft: Nft, address?: string, id?: string) => {
-  if (!address || !id) return {};
-  const nftDetail = await nft.getNftMetadata({
-    tokenAddress: address,
-    tokenId: id,
-  });
-  return nftDetail.data && nftDetail.data.metadata
-    ? nftDetail.data.metadata
-    : {};
-};
-
 /* Merge classes with tailwind-merge with clsx full feature */
 export const clsxm = (...classes: ClassValue[]) => twMerge(clsx(...classes));
 
 /* Process wallet balances in the desired format */
-export const processBalances = async (data: AddressBalance[], nft: Nft) => {
+export const processBalances = (data: AddressBalance[]) => {
   const balances: Balances = {
     coin: "",
     erc20: [],
@@ -63,14 +50,12 @@ export const processBalances = async (data: AddressBalance[], nft: Nft) => {
         label: getTokenLabel(bal.balance, bal.asset),
         address: getTokenAddress(bal.tokenAddress),
         id: getTokenId(bal.tokenId),
-        metadata: await getMetadata(nft, bal.tokenAddress, bal.tokenId),
       });
     } else if (bal.type === "mutlitoken") {
       balances.erc1155.push({
         label: getTokenLabel(bal.balance, bal.asset),
         address: getTokenAddress(bal.tokenAddress),
         id: getTokenId(bal.tokenId),
-        metadata: await getMetadata(nft, bal.tokenAddress, bal.tokenId),
       });
     }
   }
