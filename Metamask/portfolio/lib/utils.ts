@@ -2,20 +2,17 @@ import { AddressBalance } from "@tatumcom/js";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-interface Token {
+export interface Token {
   label: string;
   address: string;
+  id?: string;
 }
 
-interface NftToken extends Token {
-  id: string;
-}
-
-interface Balances {
+export interface Balances {
   coin: string;
   erc20: Token[];
-  erc721: NftToken[];
-  erc1155: NftToken[];
+  erc721: Token[];
+  erc1155: Token[];
 }
 
 const getTokenLabel = (bal: string, asset?: string) =>
@@ -51,7 +48,7 @@ export const processBalances = (data: AddressBalance[]) => {
         address: getTokenAddress(bal.tokenAddress),
         id: getTokenId(bal.tokenId),
       });
-    } else if (bal.type === "mutlitoken") {
+    } else {
       balances.erc1155.push({
         label: getTokenLabel(bal.balance, bal.asset),
         address: getTokenAddress(bal.tokenAddress),

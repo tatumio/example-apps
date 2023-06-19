@@ -11,12 +11,12 @@ export default function Home() {
       {/* Third-party component for quick and easy notifications - https://react-hot-toast.com */}
       <Toaster />
 
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex lg:mb-">
         <p className="fixed tatum left-0 top-0 flex w-full justify-center border-b pb-6 pt-8 lg:static lg:w-auto lg:rounded-xl lg:p-4">
           Get started with&nbsp;
           <code className="font-bold">{metadata.title}</code>
         </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center lg:static lg:h-auto lg:w-auto lg:bg-none">
+        <div className="fixed bottom-0 border-t border-black border-dotted left-0 flex w-full items-end justify-center bg-white lg:static lg:h-auto lg:w-auto lg:bg-none lg:border-none">
           <a
             className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
             href="https://tatum.com/"
@@ -40,7 +40,7 @@ export default function Home() {
 
       <a
         href="https://docs.tatum.com/"
-        className="text-center bg-white border border-black rounded-lg border px-5 py-4 transition-colors hover:bg-black hover:text-white lg:w-[600px]"
+        className="text-center min-w-[300px] my-5 bg-white border border-black rounded-lg border px-5 py-4 transition-colors hover:bg-black hover:text-white lg:w-[600px]"
         target="_blank"
         rel="noopener noreferrer"
       >

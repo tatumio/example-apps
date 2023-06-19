@@ -92,7 +92,7 @@ const Metamask = (): JSX.Element => {
         </Button>
       </Card>
       <Card
-        className={`transition-opacity duration-500 ${
+        className={`transition-opacity min-w-[300px] duration-500 ${
           account ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       >

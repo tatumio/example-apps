@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Metamask Transfer Example",
+  title: "Metamask Transfer",
   description: "Connect your wallet and perform a quick transfer of funds",
 };
 
