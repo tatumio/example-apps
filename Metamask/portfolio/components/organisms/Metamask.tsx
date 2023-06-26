@@ -67,7 +67,7 @@ const Metamask = (): JSX.Element => {
   return (
     <div>
       <Card
-        className={`absolute inset-0 transition-opacity duration-500 ${
+        className={`absolute justify-center inset-0 transition-opacity duration-500 ${
           account ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
       >
@@ -97,11 +97,7 @@ const Metamask = (): JSX.Element => {
               height={15}
               priority
             />
-            {loading ? (
-              <Loading />
-            ) : (
-              <div className="text-xl">{balances.coin}</div>
-            )}
+            <div className="text-xl">{balances.coin}</div>
             <input
               type="text"
               id="address"

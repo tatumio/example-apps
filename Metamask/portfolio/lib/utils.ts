@@ -15,8 +15,8 @@ export interface Balances {
   erc1155: Token[];
 }
 
-const getTokenLabel = (bal: string, asset?: string) =>
-  asset ? `${bal} ${asset}` : bal;
+const getTokenLabel = (asset?: string, bal?: string) =>
+  `${asset || "Unknown"}${bal ? `: ${bal}` : ""}`;
 
 const getTokenAddress = (address?: string) => address || "?";
 
@@ -39,18 +39,18 @@ export const processBalances = (data: AddressBalance[]) => {
       balances.coin = `${bal.balance} ${bal.asset}`;
     } else if (bal.type === "fungible") {
       balances.erc20.push({
-        label: getTokenLabel(bal.balance, bal.asset),
+        label: getTokenLabel(bal.asset, bal.balance),
         address: getTokenAddress(bal.tokenAddress),
       });
     } else if (bal.type === "nft") {
       balances.erc721.push({
-        label: getTokenLabel(bal.balance, bal.asset),
+        label: getTokenLabel(bal.asset),
         address: getTokenAddress(bal.tokenAddress),
         id: getTokenId(bal.tokenId),
       });
     } else {
       balances.erc1155.push({
-        label: getTokenLabel(bal.balance, bal.asset),
+        label: getTokenLabel(bal.asset, bal.balance),
         address: getTokenAddress(bal.tokenAddress),
         id: getTokenId(bal.tokenId),
       });

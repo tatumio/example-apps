@@ -38,9 +38,13 @@ const Portfolio = ({ balances }: { balances: Balances }): JSX.Element => {
   };
 
   React.useEffect(() => {
-    if (!token.addr || !token.id) return;
+    if (!token.addr) return;
 
-    getNftMetadata(token.addr, token.id);
+    if (token.id) {
+      getNftMetadata(token.addr, token.id);
+    } else {
+      window.open(`https://sepolia.etherscan.io/token/${token.addr}`, "_blank");
+    }
   }, [token]);
 
   const Tab = ({
@@ -55,7 +59,7 @@ const Portfolio = ({ balances }: { balances: Balances }): JSX.Element => {
         activeTab === tabNumber
           ? "bg-gray-900 text-white"
           : "bg-gray-600 text-gray-200"
-      } py-2 px-4 rounded-lg mr-2 w-[110px] focus:outline-none`}
+      } py-2 px-4 rounded-lg mr-2 w-[110px] hover:bg-gray-900`}
       onClick={() => handleTabChange(tabNumber)}
     >
       {tabText}
@@ -63,25 +67,17 @@ const Portfolio = ({ balances }: { balances: Balances }): JSX.Element => {
   );
 
   const List = ({ items }: { items: Token[] }): JSX.Element => (
-    <Card className="mt-4 text-gray-200 space-y-4">
+    <Card className="mt-4 text-gray-200 space-y-0 overflow-scroll max-h-40 divide-y">
       {items[0] ? (
         items.map((item, index) => (
-          <span className="text-center" key={index}>
-            <b
-              className="cursor-context-menu"
-              onClick={() =>
-                item.id && setToken({ addr: item.address, id: item.id })
-              }
-            >
-              {item.label}
-              {item.id ? ` (${item.id})` : ""}
-            </b>
-            <a
-              href={`https://sepolia.etherscan.io/address/${item.address}`}
-              target="_blank"
-            >
-              <p>{item.address}</p>
-            </a>
+          <span
+            className="p-4 cursor-pointer hover:bg-gray-900"
+            key={index}
+            onClick={() => setToken({ addr: item.address, id: item.id || "" })}
+          >
+            <b>{item.label}</b>
+            <b className="float-right">{item.id ? ` (${item.id})` : ""}</b>
+            <p>{item.address}</p>
           </span>
         ))
       ) : (
@@ -92,7 +88,7 @@ const Portfolio = ({ balances }: { balances: Balances }): JSX.Element => {
 
   return (
     <Card className="space-y-2">
-      <div className="flex mb-4">
+      <div className="flex">
         <Tab tabNumber={1} tabText="Fungibles" />
         <Tab tabNumber={2} tabText="NFTs" />
         <Tab tabNumber={3} tabText="Multitokens" />

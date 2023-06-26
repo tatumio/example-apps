@@ -12,10 +12,7 @@ const Card = React.forwardRef<
   ): JSX.Element => {
     return (
       <div
-        className={clsxm(
-          "flex flex-col items-center justify-center space-y-10",
-          className
-        )}
+        className={clsxm("flex flex-col items-center space-y-10", className)}
         {...rest}
       >
         {children}
