@@ -1,21 +1,31 @@
 import { TatumSDK, Network, Ethereum } from "@tatumcom/js";
-import React, { useState } from "react";
+import React from "react";
 import { toast } from "react-hot-toast";
+import Image from "next/image";
+import { clsxm, processIpfs } from "@/lib/utils";
 
 import { Token, Balances } from "@/lib/utils";
 
 import Card from "../atoms/Card";
+import Tab from "../atoms/Tab";
+import Loading from "../atoms/Loading";
 
 const Portfolio = ({ balances }: { balances: Balances }): JSX.Element => {
-  const [activeTab, setActiveTab] = useState(1);
-  const [token, setToken] = React.useState({ addr: "", id: "" });
-  const [metadata, setMetadata] = React.useState({});
+  const DEFAULT_TOKEN = { addr: "", id: "" };
+  const DEFAULT_METADATA = { name: "", description: "", image: "" };
+
+  const [loading, setLoading] = React.useState(false);
+  const [activeTab, setActiveTab] = React.useState(1);
+  const [token, setToken] = React.useState(DEFAULT_TOKEN);
+  const [metadata, setMetadata] = React.useState(DEFAULT_METADATA);
 
   const handleTabChange = (tabNumber: number) => {
     setActiveTab(tabNumber);
   };
 
   const getNftMetadata = async (addr: string, id: string) => {
+    setLoading(true);
+
     try {
       const tatum = await TatumSDK.init<Ethereum>({
         network: Network.ETHEREUM_SEPOLIA,
@@ -28,52 +38,41 @@ const Portfolio = ({ balances }: { balances: Balances }): JSX.Element => {
       });
 
       if (nft.data && nft.data.metadata) {
-        console.log(nft.data.metadata);
         setMetadata(nft.data.metadata);
       }
     } catch (error) {
       console.error(error);
       toast.error("Metadata failed to load");
     }
+
+    setLoading(false);
   };
 
   React.useEffect(() => {
-    if (!token.addr) return;
+    if (!token.addr && !token.id) return;
 
-    if (token.id) {
-      getNftMetadata(token.addr, token.id);
-    } else {
-      window.open(`https://sepolia.etherscan.io/token/${token.addr}`, "_blank");
-    }
+    getNftMetadata(token.addr, token.id);
   }, [token]);
 
-  const Tab = ({
-    tabNumber,
-    tabText,
+  const TokenList = ({
+    items,
+    disabled,
   }: {
-    tabNumber: number;
-    tabText: string;
+    items: Token[];
+    disabled?: boolean;
   }): JSX.Element => (
-    <button
-      className={`${
-        activeTab === tabNumber
-          ? "bg-gray-900 text-white"
-          : "bg-gray-600 text-gray-200"
-      } py-2 px-4 rounded-lg mr-2 w-[110px] hover:bg-gray-900`}
-      onClick={() => handleTabChange(tabNumber)}
-    >
-      {tabText}
-    </button>
-  );
-
-  const List = ({ items }: { items: Token[] }): JSX.Element => (
-    <Card className="mt-4 text-gray-200 space-y-0 overflow-scroll max-h-40 divide-y">
+    <div className="flex flex-col mt-4 text-gray-200 space-y-0 overflow-scroll max-h-40 divide-y">
       {items[0] ? (
         items.map((item, index) => (
           <span
-            className="p-4 cursor-pointer hover:bg-gray-900"
+            className={clsxm(
+              "p-4",
+              !disabled && "cursor-pointer hover:bg-gray-900"
+            )}
             key={index}
-            onClick={() => setToken({ addr: item.address, id: item.id || "" })}
+            onClick={() =>
+              !disabled && setToken({ addr: item.address, id: item.id || "" })
+            }
           >
             <b>{item.label}</b>
             <b className="float-right">{item.id ? ` (${item.id})` : ""}</b>
@@ -83,20 +82,65 @@ const Portfolio = ({ balances }: { balances: Balances }): JSX.Element => {
       ) : (
         <i>No tokens</i>
       )}
-    </Card>
+    </div>
   );
 
-  return (
-    <Card className="space-y-2">
-      <div className="flex">
-        <Tab tabNumber={1} tabText="Fungibles" />
-        <Tab tabNumber={2} tabText="NFTs" />
-        <Tab tabNumber={3} tabText="Multitokens" />
+  return token.id ? (
+    <Card className="max-w-[350px] overflow-y-scroll space-y-6">
+      <div className="flex items-center w-full">
+        <Tab
+          className="w-[45px]"
+          text={"<"}
+          onClick={() => setToken(DEFAULT_TOKEN)}
+        />
+        <p className="w-full text-right">Tokens</p>
       </div>
 
-      {activeTab === 1 && <List items={balances.erc20} />}
-      {activeTab === 2 && <List items={balances.erc721} />}
-      {activeTab === 3 && <List items={balances.erc1155} />}
+      {loading ? (
+        <Loading />
+      ) : metadata.name || metadata.description ? (
+        <Card className="text-center overflow-scroll max-h-40 space-y-6">
+          {metadata.image && (
+            <Image
+              src={processIpfs(metadata.image)}
+              alt="Token Image"
+              width={100}
+              height={100}
+              priority
+              placeholder="blur"
+              blurDataURL="/placeholder.png"
+            />
+          )}
+          {metadata.name && <b>{metadata.name}</b>}
+          {metadata.description && <p>{metadata.description}</p>}
+        </Card>
+      ) : (
+        <i>No metadata</i>
+      )}
+    </Card>
+  ) : (
+    <Card className="space-y-2">
+      <div className="flex pb-2">
+        <Tab
+          active={activeTab === 1}
+          text="Fungibles"
+          onClick={() => handleTabChange(1)}
+        />
+        <Tab
+          active={activeTab === 2}
+          text="NFTs"
+          onClick={() => handleTabChange(2)}
+        />
+        <Tab
+          active={activeTab === 3}
+          text="Multitokens"
+          onClick={() => handleTabChange(3)}
+        />
+      </div>
+
+      {activeTab === 1 && <TokenList items={balances.erc20} disabled />}
+      {activeTab === 2 && <TokenList items={balances.erc721} />}
+      {activeTab === 3 && <TokenList items={balances.erc1155} />}
     </Card>
   );
 };

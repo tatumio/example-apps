@@ -25,6 +25,12 @@ const getTokenId = (id?: string) => id || "";
 /* Merge classes with tailwind-merge with clsx full feature */
 export const clsxm = (...classes: ClassValue[]) => twMerge(clsx(...classes));
 
+export const processIpfs = (img: string) => {
+  const prefix = "https://ipfs.io/ipfs/";
+  const processed = img.replace("ipfs://", prefix);
+  return processed.startsWith(prefix) ? processed : "/placeholder.png";
+};
+
 /* Process wallet balances in the desired format */
 export const processBalances = (data: AddressBalance[]) => {
   const balances: Balances = {
