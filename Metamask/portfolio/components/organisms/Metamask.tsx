@@ -16,6 +16,7 @@ import Portfolio from "../molecules/Portfolio";
 const Metamask = (): JSX.Element => {
   const [loading, setLoading] = React.useState(false);
   const [account, setAccount] = React.useState("");
+  const [optional, setOptional] = React.useState("");
   const [balances, setBalances] = React.useState<Balances>({
     coin: "",
     erc20: [],
@@ -49,12 +50,16 @@ const Metamask = (): JSX.Element => {
     setLoading(true);
 
     try {
-      const tatum = await TatumSDK.init<Ethereum>({
-        network: Network.ETHEREUM_SEPOLIA,
-      });
+      let acc = optional;
 
-      /* https://docs.tatum.com/docs/wallet-provider/metamask/connect-a-wallet */
-      const acc = await tatum.walletProvider.metaMask.connect();
+      if (!acc) {
+        const tatum = await TatumSDK.init<Ethereum>({
+          network: Network.ETHEREUM_SEPOLIA,
+        });
+
+        /* https://docs.tatum.com/docs/wallet-provider/metamask/connect-a-wallet */
+        acc = await tatum.walletProvider.metaMask.connect();
+      }
 
       setAccount(acc);
       fetchBalances(acc);
@@ -65,9 +70,9 @@ const Metamask = (): JSX.Element => {
   };
 
   return (
-    <div>
+    <>
       <Card
-        className={`absolute justify-center inset-0 transition-opacity duration-500 ${
+        className={`absolute justify-center transition-opacity duration-500 lg:inset-0 ${
           account ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
       >
@@ -77,6 +82,14 @@ const Metamask = (): JSX.Element => {
           width={200}
           height={50}
           priority
+        />
+        <input
+          type="text"
+          value={optional}
+          onChange={(e) => setOptional(e.target.value)}
+          className="block w-[360px] text-sm text-center py-2 mt-1 border border-black rounded-md focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Enter custom wallet address (optional)"
+          required
         />
         <Button onClick={connectMetamask} disabled={loading}>
           {loading ? <Loading /> : "Connect"}
@@ -100,11 +113,10 @@ const Metamask = (): JSX.Element => {
             <div className="text-xl">{balances.coin}</div>
             <input
               type="text"
-              id="address"
               value={account}
               onChange={(e) => setAccount(e.target.value)}
-              className="block w-[360px] text-center py-2 mt-1 border-gray-400 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-700"
-              placeholder="Enter address"
+              className="block w-[360px] text-center py-2 mt-1 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-700"
+              placeholder="Enter custom wallet address"
               required
             />
           </Card>
@@ -118,7 +130,7 @@ const Metamask = (): JSX.Element => {
           </Button>
         </Card>
       </Card>
-    </div>
+    </>
   );
 };
 

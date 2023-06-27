@@ -74,7 +74,7 @@ const Metamask = (): JSX.Element => {
   };
 
   return (
-    <div>
+    <>
       <Card
         className={`absolute inset-0 transition-opacity duration-500 ${
           account ? "opacity-0 pointer-events-none" : "opacity-100"
@@ -148,7 +148,7 @@ const Metamask = (): JSX.Element => {
           </form>
         </Card>
       </Card>
-    </div>
+    </>
   );
 };
 
