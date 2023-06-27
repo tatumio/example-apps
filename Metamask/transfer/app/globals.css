@@ -11,5 +11,11 @@ body {
 
 .tatum {
   background-image: linear-gradient(130deg, #513bff, #89ffca);
+  transition: all 0.25s ease-out;
   color: white;
+}
+
+.tatum:hover {
+  background-image: linear-gradient(130deg, #5468ff, #b5fee2);
+  transform: translateY(-2px);
 }
