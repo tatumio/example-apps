@@ -74,7 +74,7 @@ const Metamask = (): JSX.Element => {
   };
 
   return (
-    <div>
+    <>
       <Card
         className={`absolute inset-0 transition-opacity duration-500 ${
           account ? "opacity-0 pointer-events-none" : "opacity-100"
@@ -92,7 +92,7 @@ const Metamask = (): JSX.Element => {
         </Button>
       </Card>
       <Card
-        className={`transition-opacity duration-500 ${
+        className={`transition-opacity min-w-[300px] duration-500 ${
           account ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       >
@@ -148,7 +148,7 @@ const Metamask = (): JSX.Element => {
           </form>
         </Card>
       </Card>
-    </div>
+    </>
   );
 };
 
