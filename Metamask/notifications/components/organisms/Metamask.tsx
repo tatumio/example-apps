@@ -14,13 +14,21 @@ import Loading from "../atoms/Loading";
 import Transactions from "../molecules/Transactions";
 
 const Metamask = (): JSX.Element => {
-  const [loading, setLoading] = React.useState(false);
+  enum LoadingStatus {
+    NONE,
+    TX,
+    SUB,
+  }
+
+  const [loading, setLoading] = React.useState(LoadingStatus.NONE);
   const [account, setAccount] = React.useState("");
   const [balance, setBalance] = React.useState("");
+  const [receiver, setReceiver] = React.useState("");
   const [transactions, setTransactions] = React.useState<Tx[]>([]);
+  const [subscription, setSubscription] = React.useState("");
 
   const connectMetamask = async () => {
-    setLoading(true);
+    setLoading(LoadingStatus.TX);
 
     try {
       const tatum = await TatumSDK.init<Ethereum>({
@@ -44,17 +52,94 @@ const Metamask = (): JSX.Element => {
       setBalance(getNativeBalance(bal.data));
       setTransactions(processTransactions(txs.data));
 
-      // TODO: Add transaction fetching
+      handleMonitoring(acc);
     } catch (error) {
       console.error(error);
       toast.error("Connection failed");
     }
+  };
 
-    setLoading(false);
+  const handleMonitoring = async (address: string) => {
+    setLoading(LoadingStatus.SUB);
+
+    if (subscription) {
+      try {
+        const tatum = await TatumSDK.init<Ethereum>({
+          network: Network.ETHEREUM_SEPOLIA,
+        });
+
+        /* https://docs.tatum.com/docs/notifications/notification-workflow/stop-monitoring-of-the-address */
+        await tatum.notification.unsubscribe(subscription);
+
+        toast.success("Subscription deleted");
+
+        setSubscription("");
+      } catch (error) {
+        console.error(error);
+        toast.error("Subscription deletion failed");
+      }
+    } else {
+      try {
+        const tatum = await TatumSDK.init<Ethereum>({
+          network: Network.ETHEREUM_SEPOLIA,
+        });
+
+        /* https://docs.tatum.com/docs/notifications/notification-workflow/get-all-existing-monitoring-subscriptions */
+        const existing = await tatum.notification.getAll({ address });
+
+        for (const sub of existing.data) {
+          if (sub.type === "INCOMING_NATIVE_TX") {
+            console.log(sub);
+            toast.success("Subscription already exists");
+
+            setSubscription(sub.id);
+            setLoading(LoadingStatus.NONE);
+
+            return;
+          }
+        }
+
+        /* https://docs.tatum.com/docs/notifications/notification-workflow/start-monitoring-of-the-address */
+        const sub = await tatum.notification.subscribe.incomingNativeTx({
+          address,
+          url: "https://dashboard.tatum.io/webhook-handler",
+        });
+
+        console.log(sub);
+        toast.success("Subscription created");
+
+        setSubscription(sub.data.id);
+      } catch (error) {
+        console.error(error);
+        toast.error("Subscription creation failed");
+      }
+    }
+
+    setLoading(LoadingStatus.NONE);
   };
 
   const executeTestTransaction = async () => {
-    // TODO: Add test transaction execution
+    setLoading(LoadingStatus.TX);
+
+    try {
+      const tatum = await TatumSDK.init<Ethereum>({
+        network: Network.ETHEREUM_SEPOLIA,
+      });
+
+      /* https://docs.tatum.com/docs/wallet-provider/metamask/transfer-native-assets */
+      const tx = await tatum.walletProvider.metaMask.transferNative(
+        receiver,
+        "0.001"
+      );
+
+      console.log(tx);
+      toast.success("Transfer successful");
+    } catch (error) {
+      console.error(error);
+      toast.error("Transfer failed");
+    }
+
+    setLoading(LoadingStatus.NONE);
   };
 
   return (
@@ -71,8 +156,11 @@ const Metamask = (): JSX.Element => {
           height={50}
           priority
         />
-        <Button onClick={connectMetamask} disabled={loading}>
-          {loading ? <Loading /> : "Connect"}
+        <Button
+          onClick={connectMetamask}
+          disabled={loading > LoadingStatus.NONE}
+        >
+          {loading > LoadingStatus.NONE ? <Loading /> : "Connect"}
         </Button>
       </Card>
       <Card
@@ -93,13 +181,36 @@ const Metamask = (): JSX.Element => {
             <div className="text-xl">{balance}</div>
           </Card>
           <Transactions txs={transactions} />
-          <Button
-            className="w-full border-white"
-            disabled={loading}
-            onClick={executeTestTransaction}
-          >
-            {loading ? <Loading /> : "Execute Test Transaction"}
-          </Button>
+          <input
+            type="text"
+            value={receiver}
+            onChange={(e) => setReceiver(e.target.value)}
+            className="block w-[360px] text-center py-2 mt-1 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-700"
+            placeholder="Enter address to receive ETH"
+            required
+          />
+          <div className="flex flex-row w-full space-x-4">
+            <Button
+              className="w-full border-white"
+              disabled={loading === LoadingStatus.TX || !receiver}
+              onClick={executeTestTransaction}
+            >
+              {loading === LoadingStatus.TX ? <Loading /> : "Send 0.001 ETH"}
+            </Button>
+            <Button
+              className="w-full border-white"
+              disabled={loading === LoadingStatus.SUB}
+              onClick={() => handleMonitoring(account)}
+            >
+              {loading === LoadingStatus.SUB ? (
+                <Loading />
+              ) : subscription ? (
+                "Stop monitoring"
+              ) : (
+                "Start monitoring"
+              )}
+            </Button>
+          </div>
         </Card>
       </Card>
     </>

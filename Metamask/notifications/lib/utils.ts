@@ -24,14 +24,12 @@ export const getNativeBalance = (data: AddressBalance[]) => {
 export const processTransactions = (data: AddressTransaction[]) => {
   const txs: Tx[] = [];
   for (const tx of data) {
-    console.log(tx.transactionType);
-    if (tx.amount !== "0")
-      txs.push({
-        hash: tx.hash,
-        counterAddr: tx.counterAddress || tx.address,
-        amount: tx.amount,
-        outgoing: tx.amount.includes("-"),
-      });
+    txs.push({
+      hash: tx.hash,
+      counterAddr: tx.counterAddress || tx.address,
+      amount: tx.amount,
+      outgoing: tx.amount.includes("-"),
+    });
   }
   return txs;
 };
