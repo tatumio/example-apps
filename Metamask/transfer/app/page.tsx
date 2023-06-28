@@ -18,7 +18,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          &lt; Start developing with&nbsp;
+          &lt; Develop with&nbsp;
           <code className="font-bold">{metadata.title}</code>
         </a>
         <div className="fixed bottom-0 border-t border-black border-dotted left-0 flex w-full items-end justify-center bg-white lg:static lg:h-auto lg:w-auto lg:bg-none lg:border-none">

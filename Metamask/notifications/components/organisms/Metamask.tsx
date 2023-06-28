@@ -6,7 +6,7 @@ import * as React from "react";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
 
-import { getNativeBalance } from "@/lib/utils";
+import { getNativeBalance, processTransactions, Tx } from "@/lib/utils";
 
 import Button from "../atoms/Button";
 import Card from "../atoms/Card";
@@ -17,6 +17,7 @@ const Metamask = (): JSX.Element => {
   const [loading, setLoading] = React.useState(false);
   const [account, setAccount] = React.useState("");
   const [balance, setBalance] = React.useState("");
+  const [transactions, setTransactions] = React.useState<Tx[]>([]);
 
   const connectMetamask = async () => {
     setLoading(true);
@@ -32,8 +33,16 @@ const Metamask = (): JSX.Element => {
       /* https://docs.tatum.com/docs/wallet-address-operations/get-all-assets-the-wallet-holds */
       const bal = await tatum.address.getBalance({ addresses: [acc] });
 
+      /* https://docs.tatum.com/docs/wallet-address-operations/get-all-transactions-on-the-wallet */
+      const txs = await tatum.address.getTransactions({
+        address: acc,
+        transactionTypes: ["native"],
+        pageSize: 10,
+      });
+
       setAccount(acc);
       setBalance(getNativeBalance(bal.data));
+      setTransactions(processTransactions(txs.data));
 
       // TODO: Add transaction fetching
     } catch (error) {
@@ -51,7 +60,7 @@ const Metamask = (): JSX.Element => {
   return (
     <>
       <Card
-        className={`absolute justify-center transition-opacity duration-500 inset-0 ${
+        className={`absolute justify-center transition-opacity duration-500 lg:inset-0 ${
           account ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
       >
@@ -83,7 +92,7 @@ const Metamask = (): JSX.Element => {
             />
             <div className="text-xl">{balance}</div>
           </Card>
-          <Transactions txs={["test 1", "test 2"]} />
+          <Transactions txs={transactions} />
           <Button
             className="w-full border-white"
             disabled={loading}
