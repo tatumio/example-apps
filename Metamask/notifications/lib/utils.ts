@@ -1,6 +1,7 @@
 import { AddressBalance, AddressTransaction } from "@tatumcom/js";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import BN from "bignumber.js";
 
 export interface Tx {
   hash: string;
@@ -9,13 +10,15 @@ export interface Tx {
   outgoing: boolean;
 }
 
+const formatBalance = (value: string, asset?: string) => `${value} ${asset}`;
+
 /* Merge classes with tailwind-merge with clsx full feature */
 export const clsxm = (...classes: ClassValue[]) => twMerge(clsx(...classes));
 
 /* Extract only native balance in the desired format from all received address balances */
 export const getNativeBalance = (data: AddressBalance[]) => {
   for (const bal of data) {
-    if (bal.type === "native") return `${bal.balance} ${bal.asset}`;
+    if (bal.type === "native") return formatBalance(bal.balance, bal.asset);
   }
   return "0";
 };
@@ -32,4 +35,26 @@ export const processTransactions = (data: AddressTransaction[]) => {
     });
   }
   return txs;
+};
+
+/* Process retrieved notification */
+export const processNotification = (
+  bal: string,
+  txs: Tx[],
+  notif: Record<string, string>
+) => {
+  if (notif.amount && notif.currency && notif.counterAddress && notif.txId) {
+    const balance = bal.split(" ");
+    bal = new BN(balance[0]).minus(notif.amount).toFixed();
+    bal = formatBalance(bal, notif.currency);
+
+    txs.pop();
+    txs.unshift({
+      hash: notif.txId,
+      counterAddr: notif.counterAddress,
+      amount: `-${notif.amount}`,
+      outgoing: true,
+    });
+  }
+  return { bal, txs };
 };

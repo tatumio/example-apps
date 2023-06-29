@@ -7,7 +7,12 @@ import Image from "next/image";
 import { toast } from "react-hot-toast";
 import { io } from "socket.io-client";
 
-import { getNativeBalance, processTransactions, Tx } from "@/lib/utils";
+import {
+  getNativeBalance,
+  processNotification,
+  processTransactions,
+  Tx,
+} from "@/lib/utils";
 
 import Button from "../atoms/Button";
 import Card from "../atoms/Card";
@@ -89,7 +94,7 @@ const Metamask = (): JSX.Element => {
         const existing = await tatum.notification.getAll({ address });
 
         for (const sub of existing.data) {
-          if (sub.type === "INCOMING_NATIVE_TX") {
+          if (sub.type === "OUTGOING_NATIVE_TX") {
             console.log(sub);
             toast.success("Subscription already exists");
 
@@ -101,9 +106,9 @@ const Metamask = (): JSX.Element => {
         }
 
         /* https://docs.tatum.com/docs/notifications/notification-workflow/start-monitoring-of-the-address */
-        const sub = await tatum.notification.subscribe.incomingNativeTx({
+        const sub = await tatum.notification.subscribe.outgoingNativeTx({
           address,
-          url: "https://dashboard.tatum.io/webhook-handler",
+          url: `${location.href}/api/webhook`,
         });
 
         console.log(sub);
@@ -152,12 +157,21 @@ const Metamask = (): JSX.Element => {
     });
 
     socket.on("notification", (notification) => {
-      // TODO: Replace with proper notification handling
       console.log(notification);
+      toast.success("Notification received");
+
+      const { bal, txs } = processNotification(
+        balance,
+        transactions,
+        notification
+      );
+
+      setBalance(bal);
+      setTransactions(txs);
     });
 
     if (socket) return () => socket.disconnect();
-  }, []);
+  });
 
   return (
     <>
