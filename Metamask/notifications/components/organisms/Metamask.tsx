@@ -5,6 +5,7 @@ import { TatumSDK, Network, Ethereum } from "@tatumcom/js";
 import * as React from "react";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
+import { io } from "socket.io-client";
 
 import { getNativeBalance, processTransactions, Tx } from "@/lib/utils";
 
@@ -141,6 +142,22 @@ const Metamask = (): JSX.Element => {
 
     setLoading(LoadingStatus.NONE);
   };
+
+  React.useEffect((): any => {
+    const socket = io({ path: "/api/socketio" });
+
+    socket.on("connect_error", (err) => {
+      console.error(`connect_error due to ${err.message}`);
+      toast.error("Socket failed");
+    });
+
+    socket.on("notification", (notification) => {
+      // TODO: Replace with proper notification handling
+      console.log(notification);
+    });
+
+    if (socket) return () => socket.disconnect();
+  }, []);
 
   return (
     <>
