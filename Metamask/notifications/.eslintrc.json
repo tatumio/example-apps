@@ -1,0 +1,7 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    /* Manually added rule to turn off enforcing of display name in component definition */
+    "react/display-name": "off"
+  }
+}

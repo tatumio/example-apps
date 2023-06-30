@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Toaster } from "react-hot-toast";
 
-import Metamask from "@/components/Metamask";
+import Metamask from "@/components/organisms/Metamask";
 
 import { metadata } from "./layout";
 
@@ -11,10 +11,10 @@ export default function Home() {
       {/* Third-party component for quick and easy notifications - https://react-hot-toast.com */}
       <Toaster />
 
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex lg:mb-">
+      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex lg:mb-5">
         <a
           className="fixed tatum left-0 top-0 flex w-full justify-center border-b pb-6 pt-8 lg:static lg:w-auto lg:rounded-xl lg:p-4"
-          href="https://github.com/tatumio/example-apps/tree/master/Metamask/transfer"
+          href="https://github.com/tatumio/example-apps/tree/master/Metamask/notifications"
           target="_blank"
           rel="noopener noreferrer"
         >

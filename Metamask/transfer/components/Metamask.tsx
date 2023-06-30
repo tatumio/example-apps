@@ -76,7 +76,7 @@ const Metamask = (): JSX.Element => {
   return (
     <>
       <Card
-        className={`absolute inset-0 transition-opacity duration-500 ${
+        className={`absolute transition-opacity duration-500 lg:inset-0 ${
           account ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
       >

@@ -13,7 +13,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 In order to be able to connect your wallet, you also need to have the [MetaMask](https://metamask.io/) extension in your browser. For more information on how to install, configure and use it, please refer to [Getting started with MetaMask](https://support.metamask.io/hc/en-us/articles/360015489531-Getting-started-with-MetaMask).
 
-You should also make sure to switch to [Sepolia Testnet](https://sepolia.etherscan.io/) network before interacting with the app. In order to be able to play around with it properly, you will need a wallet containing several tokens (ideally not only native and fungible, but also NFTs or multitokens). However, if you currently do not have access to such wallet, upon connection you can also input a different wallet address and click on `Refresh Balances`.
+You should also make sure to switch to [Sepolia Testnet](https://sepolia.etherscan.io/) network before interacting with the app. In order to be able to play around with it properly, you will need a wallet containing several tokens (ideally not only native and fungible, but also NFTs or multitokens).
+
+There is, however, also an option to skip the process of installing [MetaMask](https://metamask.io/) and obtaining such wallet by simply inputting a different wallet address of your choice you do not necessarily have to own.
 
 ## Getting Started
 
