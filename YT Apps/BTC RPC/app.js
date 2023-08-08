@@ -32,4 +32,7 @@ button.addEventListener("click", async () => {
     table.appendChild(row);
   }
   resultDiv.appendChild(table);
+
+  // destroy Tatum SDK - needed for stopping background jobs
+  tatum.destroy();
 });

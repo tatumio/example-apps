@@ -27,11 +27,11 @@ const Metamask = (): JSX.Element => {
   const fetchBalances = async (address: string) => {
     if (!loading) setLoading(true);
 
-    try {
-      const tatum = await TatumSDK.init<Ethereum>({
-        network: Network.ETHEREUM_SEPOLIA,
-      });
+    const tatum = await TatumSDK.init<Ethereum>({
+      network: Network.ETHEREUM_SEPOLIA,
+    });
 
+    try {
       /* https://docs.tatum.com/docs/wallet-address-operations/get-all-assets-the-wallet-holds */
       const bal = await tatum.address.getBalance({
         addresses: [address],
@@ -43,30 +43,36 @@ const Metamask = (): JSX.Element => {
       toast.error("Balances failed to load");
     }
 
+    // destroy Tatum SDK - needed for stopping background jobs
+    tatum.destroy();
+
     setLoading(false);
   };
 
   const connectMetamask = async () => {
     setLoading(true);
 
-    try {
-      let acc = optional;
+    let acc = optional;
 
-      if (!acc) {
-        const tatum = await TatumSDK.init<Ethereum>({
-          network: Network.ETHEREUM_SEPOLIA,
-        });
+    if (!acc) {
+      const tatum = await TatumSDK.init<Ethereum>({
+        network: Network.ETHEREUM_SEPOLIA,
+      });
 
+      try {
         /* https://docs.tatum.com/docs/wallet-provider/metamask/connect-a-wallet */
         acc = await tatum.walletProvider.metaMask.connect();
+      } catch (error) {
+        console.error(error);
+        toast.error("Connection failed");
       }
 
-      setAccount(acc);
-      fetchBalances(acc);
-    } catch (error) {
-      console.error(error);
-      toast.error("Connection failed");
+      // destroy Tatum SDK - needed for stopping background jobs
+      tatum.destroy();
     }
+
+    setAccount(acc);
+    fetchBalances(acc);
   };
 
   return (
