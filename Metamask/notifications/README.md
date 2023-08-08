@@ -2,7 +2,7 @@
 
 > Connect your wallet and keep track of your transactions
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) utilizing [`@tatumcom/js`](https://docs.tatum.com/sdk/javascript-typescript-sdk) for a simple [MetaMask](https://metamask.io/) integration. It combines several examples available in [Tatum Docs](https://docs.tatum.com/) into a single straightforward easily customizable mini application capable of connecting to the wallet, displaying recent transactions of native currency and monitoring further outgoing native currency transfers on [Sepolia Testnet](https://sepolia.etherscan.io/).
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) utilizing [`@tatumio/tatum`](https://docs.tatum.com/sdk/javascript-typescript-sdk) for a simple [MetaMask](https://metamask.io/) integration. It combines several examples available in [Tatum Docs](https://docs.tatum.com/) into a single straightforward easily customizable mini application capable of connecting to the wallet, displaying recent transactions of native currency and monitoring further outgoing native currency transfers on [Sepolia Testnet](https://sepolia.etherscan.io/).
 
 ![Demo](./public/demo.png)
 

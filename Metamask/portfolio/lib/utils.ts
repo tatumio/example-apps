@@ -1,4 +1,4 @@
-import { AddressBalance } from "@tatumcom/js";
+import { AddressBalance } from "@tatumio/tatum";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 

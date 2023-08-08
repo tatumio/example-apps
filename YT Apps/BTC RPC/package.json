@@ -10,7 +10,7 @@
     "start": "run-p watch serve"
   },
   "dependencies": {
-    "@tatumcom/js": "^1.4.20",
+    "@tatumio/tatum": "^3.0.6",
     "parcel": "^2.9.0"
   },
   "devDependencies": {

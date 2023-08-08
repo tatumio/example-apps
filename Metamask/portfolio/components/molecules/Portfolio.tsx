@@ -1,4 +1,4 @@
-import { TatumSDK, Network, Ethereum } from "@tatumcom/js";
+import { TatumSDK, Network, Ethereum } from "@tatumio/tatum";
 import React from "react";
 import { toast } from "react-hot-toast";
 import Image from "next/image";

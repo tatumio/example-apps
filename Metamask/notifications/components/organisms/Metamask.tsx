@@ -1,7 +1,7 @@
 /* Required since nextjs13 to define a client component */
 "use client";
 
-import { TatumSDK, Network, Ethereum } from "@tatumcom/js";
+import { TatumSDK, Network, Ethereum } from "@tatumio/tatum";
 import * as React from "react";
 import Image from "next/image";
 import { toast } from "react-hot-toast";

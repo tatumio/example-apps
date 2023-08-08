@@ -1,4 +1,4 @@
-import { AddressBalance, AddressTransaction } from "@tatumcom/js";
+import { AddressBalance, AddressTransaction } from "@tatumio/tatum";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import BN from "bignumber.js";
