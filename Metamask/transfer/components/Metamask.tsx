@@ -1,7 +1,7 @@
 /* Required since nextjs13 to define a client component */
 "use client";
 
-import { TatumSDK, Network, Ethereum } from "@tatumcom/js";
+import { TatumSDK, Network, Ethereum } from "@tatumio/tatum";
 import * as React from "react";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
@@ -22,11 +22,11 @@ const Metamask = (): JSX.Element => {
   const connectMetamask = async () => {
     setLoading(true);
 
-    try {
-      const tatum = await TatumSDK.init<Ethereum>({
-        network: Network.ETHEREUM_SEPOLIA,
-      });
+    const tatum = await TatumSDK.init<Ethereum>({
+      network: Network.ETHEREUM_SEPOLIA,
+    });
 
+    try {
       /* https://docs.tatum.com/docs/wallet-provider/metamask/connect-a-wallet */
       const acc = await tatum.walletProvider.metaMask.connect();
 
@@ -40,6 +40,9 @@ const Metamask = (): JSX.Element => {
       toast.error("Connection failed");
     }
 
+    // destroy Tatum SDK - needed for stopping background jobs
+    tatum.destroy();
+
     setLoading(false);
   };
 
@@ -47,11 +50,11 @@ const Metamask = (): JSX.Element => {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const tatum = await TatumSDK.init<Ethereum>({
-        network: Network.ETHEREUM_SEPOLIA,
-      });
+    const tatum = await TatumSDK.init<Ethereum>({
+      network: Network.ETHEREUM_SEPOLIA,
+    });
 
+    try {
       /* https://docs.tatum.com/docs/wallet-provider/metamask/transfer-native-assets */
       const tx = await tatum.walletProvider.metaMask.transferNative(
         address,
@@ -69,6 +72,9 @@ const Metamask = (): JSX.Element => {
       console.error(error);
       toast.error("Transfer failed");
     }
+
+    // destroy Tatum SDK - needed for stopping background jobs
+    tatum.destroy();
 
     setLoading(false);
   };

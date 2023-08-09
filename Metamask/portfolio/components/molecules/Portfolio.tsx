@@ -1,4 +1,4 @@
-import { TatumSDK, Network, Ethereum } from "@tatumcom/js";
+import { TatumSDK, Network, Ethereum } from "@tatumio/tatum";
 import React from "react";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
@@ -26,11 +26,11 @@ const Portfolio = ({ balances }: { balances: Balances }): JSX.Element => {
   const getNftMetadata = async (addr: string, id: string) => {
     setLoading(true);
 
-    try {
-      const tatum = await TatumSDK.init<Ethereum>({
-        network: Network.ETHEREUM_SEPOLIA,
-      });
+    const tatum = await TatumSDK.init<Ethereum>({
+      network: Network.ETHEREUM_SEPOLIA,
+    });
 
+    try {
       /* https://docs.tatum.com/docs/nfts/get-the-metadata-of-a-specific-nft */
       const nft = await tatum.nft.getNftMetadata({
         tokenAddress: addr,
@@ -44,6 +44,9 @@ const Portfolio = ({ balances }: { balances: Balances }): JSX.Element => {
       console.error(error);
       toast.error("Metadata failed to load");
     }
+
+    // destroy Tatum SDK - needed for stopping background jobs
+    tatum.destroy();
 
     setLoading(false);
   };
