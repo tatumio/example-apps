@@ -1,4 +1,4 @@
-# Example Apps
+# Tatum Example Apps
 
 Welcome to the [Tatum Example Apps](https://tatum.io/dapp-templates) repository, containing a collection of simple example applications that demonstrate the usage of the [Tatum SDK](https://github.com/tatumio/tatum-js) for various blockchain and cryptocurrency operations!
 
