@@ -1,7 +1,7 @@
 /* Required since nextjs13 to define a client component */
 "use client";
 
-import { TatumSDK, Network, Ethereum } from "@tatumio/tatum";
+import { TatumSDK, Network, Ethereum, MetaMask } from "@tatumio/tatum";
 import * as React from "react";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
@@ -61,7 +61,7 @@ const Metamask = (): JSX.Element => {
 
       try {
         /* https://docs.tatum.com/docs/wallet-provider/metamask/connect-a-wallet */
-        acc = await tatum.walletProvider.metaMask.connect();
+        acc = await tatum.walletProvider.use(MetaMask).getWallet();
       } catch (error) {
         console.error(error);
         toast.error("Connection failed");

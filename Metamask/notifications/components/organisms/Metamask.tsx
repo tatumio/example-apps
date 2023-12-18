@@ -1,7 +1,7 @@
 /* Required since nextjs13 to define a client component */
 "use client";
 
-import { TatumSDK, Network, Ethereum } from "@tatumio/tatum";
+import { TatumSDK, Network, Ethereum, MetaMask } from "@tatumio/tatum";
 import * as React from "react";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
@@ -42,7 +42,7 @@ const Metamask = (): JSX.Element => {
 
     try {
       /* https://docs.tatum.com/docs/wallet-provider/metamask/connect-a-wallet */
-      const acc = await tatum.walletProvider.metaMask.connect();
+      const acc = await tatum.walletProvider.use(MetaMask).getWallet();
 
       /* https://docs.tatum.com/docs/wallet-address-operations/get-all-assets-the-wallet-holds */
       const bal = await tatum.address.getBalance({ addresses: [acc] });
@@ -135,10 +135,9 @@ const Metamask = (): JSX.Element => {
 
     try {
       /* https://docs.tatum.com/docs/wallet-provider/metamask/transfer-native-assets */
-      const tx = await tatum.walletProvider.metaMask.transferNative(
-        receiver,
-        "0.001"
-      );
+      const tx = await tatum.walletProvider
+        .use(MetaMask)
+        .transferNative(receiver, "0.001");
 
       console.log(tx);
       toast.success("Transfer successful");
