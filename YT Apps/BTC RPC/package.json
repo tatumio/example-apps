@@ -10,7 +10,7 @@
     "start": "run-p watch serve"
   },
   "dependencies": {
-    "@tatumio/tatum": "^4.1.34",
+    "@tatumio/tatum": "^4.2.23",
     "parcel": "^2.9.0"
   },
   "devDependencies": {

@@ -45,7 +45,10 @@ const Metamask = (): JSX.Element => {
       const acc = await tatum.walletProvider.use(MetaMask).getWallet();
 
       /* https://docs.tatum.com/docs/wallet-address-operations/get-all-assets-the-wallet-holds */
-      const bal = await tatum.address.getBalance({ addresses: [acc] });
+      const bal = await tatum.address.getBalance({
+        addresses: [acc],
+        tokenTypes: ["native"],
+      });
 
       /* https://docs.tatum.com/docs/wallet-address-operations/get-all-transactions-on-the-wallet */
       const txs = await tatum.address.getTransactions({

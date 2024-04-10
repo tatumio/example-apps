@@ -1,4 +1,8 @@
-import { AddressBalance, AddressTransaction } from "@tatumio/tatum";
+import {
+  AddressBalance,
+  AddressTransaction,
+  AddressTransactionUTXO,
+} from "@tatumio/tatum";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import BN from "bignumber.js";
@@ -24,7 +28,9 @@ export const getNativeBalance = (data: AddressBalance[]) => {
 };
 
 /* Process retrieved transaction data */
-export const processTransactions = (data: AddressTransaction[]) => {
+export const processTransactions = (
+  data: (AddressTransaction | AddressTransactionUTXO)[]
+) => {
   const txs: Tx[] = [];
   for (const tx of data) {
     txs.push({

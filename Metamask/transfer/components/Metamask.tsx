@@ -31,7 +31,10 @@ const Metamask = (): JSX.Element => {
       const acc = await tatum.walletProvider.use(MetaMask).getWallet();
 
       /* https://docs.tatum.com/docs/wallet-address-operations/get-all-assets-the-wallet-holds */
-      const bal = await tatum.address.getBalance({ addresses: [acc] });
+      const bal = await tatum.address.getBalance({
+        addresses: [acc],
+        tokenTypes: ["native"],
+      });
 
       setAccount(acc);
       setBalance(getNativeBalance(bal.data));
@@ -64,7 +67,10 @@ const Metamask = (): JSX.Element => {
       toast.success("Transfer successful");
 
       /* https://docs.tatum.com/docs/wallet-address-operations/get-all-assets-the-wallet-holds */
-      const bal = await tatum.address.getBalance({ addresses: [account] });
+      const bal = await tatum.address.getBalance({
+        addresses: [account],
+        tokenTypes: ["native"],
+      });
 
       setBalance(getNativeBalance(bal.data));
     } catch (error) {
